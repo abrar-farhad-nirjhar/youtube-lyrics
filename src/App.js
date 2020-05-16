@@ -21,7 +21,7 @@ let reducers = combineReducers({
 })
 
 let store = createStore(reducers, applyMiddleware(thunk))
-//s
+
 function App() {
 
   
@@ -46,7 +46,7 @@ function App() {
             <Col xs={12} md={4}>
               <Lyrics />
             </Col>
-            <Col xs={6} md={8}>
+            <Col xs={12} md={8}>
               <Youtube />
             </Col>
           </Row>
