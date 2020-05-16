@@ -1,25 +1,61 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { combineReducers, createStore, applyMiddleware } from 'redux'
+import youtubeDataReducer from './reducers/youtubeDataReducer'
+import lyricsDataReducer from './reducers/lyricsDataReducer'
+import setVideoReducer from './reducers/setVideoReducer'
+import getLyricsAction from './actions/getLyricsAction'
+import getYoutubeDataAction from './actions/getYoutubeDataAction'
+import thunk from 'redux-thunk';
+import SearchForm from './components/form'
+import Lyrics from './components/lyrics'
+import {Provider} from 'react-redux'
+import {Row, Col} from 'react-bootstrap'
+import Youtube from './components/youtube'
+import Video from './components/video'
+
+let reducers = combineReducers({
+  youtube: youtubeDataReducer,
+  lyrics: lyricsDataReducer,
+  videoId: setVideoReducer,
+})
+
+let store = createStore(reducers, applyMiddleware(thunk))
 
 function App() {
+
+  
+  
+  const search=(artist, song)=>{
+    
+    store.dispatch(getLyricsAction(artist, song))
+    store.dispatch(getYoutubeDataAction(artist, song))
+
+
+  }
+  
   return (
+    <Provider store={store}>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+        <br></br>
+        <SearchForm search={search}/>
+        <Video />
+       
+        <Row className="show-grid">
+            <Col xs={12} md={4}>
+              <Lyrics />
+            </Col>
+            <Col xs={6} md={8}>
+              <Youtube />
+            </Col>
+          </Row>
+        
+        
+      </div>
+
     </div>
+    </Provider>
   );
 }
 
